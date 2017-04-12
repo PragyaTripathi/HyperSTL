@@ -1,0 +1,17 @@
+{
+    "contents" : "#' @title vis.fitted\n#' @name vis.fitted\n#' @description Creates a graph of fitted values\n#' @export\nvis.fitted <- function(y, y.hat) {\n  plot(y, type='l', col='blue', \n        ylim=c(min(y[!is.na(y)], y.hat[!is.na(y.hat)]), \n               max(y[!is.na(y)], y.hat[!is.na(y.hat)])))\n  lines(y.hat, col='red')\n  legend(\"topright\", \n         col=c(\"red\", \"blue\"), \n         legend=c(\"Fitted\", \"Observed\"), \n         lty=c(1,1))\n}\n\n#' @title vis.rainfall\n#' @description Plots accumulative rainfall and given depths\n#' @export\nvis.rainfall <- function(data, depths) {\n  mmin <- Inf\n  mmax <- -Inf\n  for(d in depths) {\n    mmin <- min(mmin, data[[d]])\n    mmax <- max(mmax, data[[d]])\n  }\n  \n  par(mar=c(5,4,4,5))\n  \n  for(i in 1:length(depths)) {\n    if(i == 1) {\n      plot(data$date, data[[depths[[i]]]], \n           col=1, \n           ylim=c(mmin, mmax),\n           ylab='Soil moisture',\n           xlab=\"date\",\n           type='l')  \n    }\n    \n    lines(data$date, data[[depths[[i]]]], col=i)\n  }\n  par(new=TRUE)\n  \n  plot(data$date, data$rainfall, type='l', \n       col=length(depths) + 1,\n       ylab=\"\",\n       xlab=\"\",\n       axes=FALSE)\n  \n  axis(4)\n  axis(side=4, at = pretty(range(data$rainfall)))\n  mtext(\"rainfall\",side=4,line=3)\n  legend(\"topright\",col=1:length(depths),\n         lty=1, legend=depths)\n}\n\n#' @title vis.soilmoisture\n#' @description Visualizes soil moisture time series\n#' @export\nvis.soilmoisture <- function(data, depths) {\n  mmin <- Inf\n  mmax <- -Inf\n  for(d in depths) {\n    mmin <- min(mmin, data[[d]])\n    mmax <- max(mmax, data[[d]])\n  }\n  \n  for(i in 1:length(depths)) {\n    if(i == 1) {\n      plot(data$date, data[[depths[[i]]]], \n           col=1, \n           ylim=c(mmin, mmax),\n           ylab='Soil moisture',\n           xlab=\"date\",\n           type='l')  \n    }\n    \n    lines(data$date, data[[depths[[i]]]], col=i)\n  }\n  legend(\"topright\",col=1:length(depths),\n         lty=1, legend=depths)\n}\n",
+    "created" : 1444250302920.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "815647991",
+    "id" : "F36F90A4",
+    "lastKnownWriteTime" : 1439487339,
+    "path" : "~/Google Drive/USGS-project/code/smmodeling/R/visualization.R",
+    "project_path" : "R/visualization.R",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
