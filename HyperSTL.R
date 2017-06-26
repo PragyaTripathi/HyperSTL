@@ -1,6 +1,7 @@
 library('GenSA')
 library('GA')
 library('DEoptim')
+library('irace')
 
 #' @title HyperSTL
 #' @description Optimization algorithm for STL
@@ -9,12 +10,12 @@ library('DEoptim')
 #' @param algorithm Optimization algorithm. Possible values are 
 #' 'sa', 'de', 'jade', 'sga', 'bga', 'irace'. Defaults to 'sa'.
 #' @param max.feval Max number of function evaluations. Defults to 2500.
-#' @param weights Weights for decomposed time series using STL. 
+#' @param weights Weights (w1, w2, w3) for decomposed time series using STL. 
 #' Expects a vector containing three values. e.g. c(10,10,10) i.e. Equal weights for trend, seasonality and remainder.
-#' @param minparams Minimum params for the grid search
-#' @param maxparams Maximum params for the grid search
-#' @param data.freq 
-#' @param ... Rest of the params are passed to STL function
+#' @param minparams Minimum params for search
+#' @param maxparams Maximum params for search
+#' @param data.freq Number of data points per season, e.g. season = 24 hrs, 
+#'                  data points are 2 minutes apart => data.freq = 24*60/2 = 720
 #'
 #' @return Optimized version of time series.
 #' @export
@@ -27,8 +28,7 @@ HyperSTL <- function(data,
                      weights = c(20, 10, 30),
                      minparams = c(7, 7, 72),
                      maxparams = c(99, 99, 200),
-                     data.freq = 24,
-                     ...) {
+                     data.freq = 24) {
   
   MinParams <- minparams
   MaxParams <- maxparams
@@ -88,13 +88,11 @@ HyperSTL <- function(data,
     y.trend <- as.numeric(y.stl$time.series[, "trend"])
     mse <- sqrt(mean((y.trend - yhat) ^ 2))
     
-    # print(weights)
     objective <- sum(c(sd(r), abs(max(r) - min(r)), mse) * weights)
     if (is.nan(objective) ||
         is.na(objective) || is.null(objective)) {
       objective = 99999999
     }
-    # print(objective)
     objective
   }
   
@@ -210,14 +208,8 @@ HyperSTL <- function(data,
       ind.Big = which(solution > MaxParams)
       solution[ind.Big] = MaxParams[ind.Big]
       
-      solution.obj = -1 * evalFuncForBinary(solution.binary)
-      # print(GAModel@solution)
-      
-      # print(solution)
-      print(-1 * evalFuncForBinary(solution.binary))
-      
-      # print(obj.smoothing(data, depth, solution))
-      
+      solution.obj = -1 * evalFuncForBinary(solution.binary)      
+      print(solution.obj)      
     },
     # ------------------------------------------------------------------
     irace = {
@@ -225,7 +217,6 @@ HyperSTL <- function(data,
       hook.run = function(experiment, config = list()) {
         candidate <- experiment$candidate
         x = c(candidate[["x1"]], candidate[["x2"]], candidate[["x3"]])
-        # print(x)
         y = evalFuncToMinimize(x)
         y
       }
@@ -246,7 +237,6 @@ HyperSTL <- function(data,
         parameters = parameters
       )
       
-      print(cat("\n\n\n final result  "))
       solution = c(result[1, ]$x1, result[1, ]$x2, result[1, ]$x3)
       solution.obj = evalFuncToMinimize(solution)
       print(evalFuncToMinimize(solution))
