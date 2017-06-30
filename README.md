@@ -44,3 +44,26 @@ Params:
 Returns:
     STL object (object containing trend, seasonality, and remainder).
 ```
+
+## Setup
+
+* Clone this repository to a desired folder.
+`$ cd <folder_of_your_choice>`
+`$ git clone https://github.com/aniruddha55/HyperSTL.git`
+
+## Run the code in R Studio
+
+1. Set working directory to the folder where the repo has been cloned.
+`> setwd("<folder_of_your_choice>/HyperSTL")`
+
+2. Ensure working directory has been properly set.
+`> getwd()`
+
+3. Install necessary packages needed for HyperSTL code.
+`> install.packages("GA")`
+`> install.packages("DEoptim")`
+`> install.packages("GenSA")`
+`> install.packages("irace")`
+
+4. Run given sample code that uses HyperSTL.
+`> source('sampleRun.R')`
