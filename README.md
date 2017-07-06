@@ -29,7 +29,7 @@ y.optimized.stl = HyperSTL(data, "value",
                                 subsample.rate)
 
 Params:
-    #' @param data data.frame containing time series: soil moisture and rainfall. One column with name "rainfall" is required. 
+    #' @param **data** data.frame containing time series: soil moisture and rainfall. One column with name "rainfall" is required. 
     #' @param column name of data.frame-column containing soil moisture time series
     #' @param algorithm Optimization algorithm. Possible values are 
     #' 'sa', 'de', 'jade', 'sga', 'bga', 'irace'. Defaults to 'sa'.
