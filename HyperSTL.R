@@ -5,8 +5,8 @@ library('irace')
 
 #' @title HyperSTL
 #' @description Optimization algorithm for STL
-#' @param data data.frame containing time series
-#' @param column column containing values of time series
+#' @param data data.frame containing time series: soil moisture and rainfall. One column with name "rainfall" is required. 
+#' @param column name of data.frame-column containing soil moisture time series
 #' @param algorithm Optimization algorithm. Possible values are 
 #' 'sa', 'de', 'jade', 'sga', 'bga', 'irace'. Defaults to 'sa'.
 #' @param max.feval Max number of function evaluations. Defults to 2500.
@@ -34,8 +34,11 @@ HyperSTL <- function(data,
   MaxParams <- maxparams
   weights = weights / sum(weights)
   
+  if (! 'rainfall' %in% colnames(data)) {
+     stop('\n No column with name rainfall')
+  }
   poly.smooth <- function(data, column) {
-    y <- data[[column]]
+    y <- data[[column]]    
     intervals <- findInterval(data$rainfall, c(0, 1))
     index <- 1
     while (index < length(intervals)) {
