@@ -29,17 +29,17 @@ y.optimized.stl = HyperSTL(data, "value",
                                 subsample.rate)
 
 Params:
-    #' @param data data.frame containing time series
-    #' @param column column containing values of time series
+    #' @param data data.frame containing time series: soil moisture and rainfall. One column with name "rainfall" is required. 
+    #' @param column name of data.frame-column containing soil moisture time series
     #' @param algorithm Optimization algorithm. Possible values are 
     #' 'sa', 'de', 'jade', 'sga', 'bga', 'irace'. Defaults to 'sa'.
     #' @param max.feval Max number of function evaluations. Defults to 2500.
-    #' @param weights Weights for decomposed time series using STL. 
+    #' @param weights Weights (w1, w2, w3) for decomposed time series using STL. 
     #' Expects a vector containing three values. e.g. c(10,10,10) i.e. Equal weights for trend, seasonality and remainder.
-    #' @param minparams Minimum params for the grid search
-    #' @param maxparams Maximum params for the grid search
-    #' @param data.freq 
-    #' @param ... Rest of the params are passed to STL function
+    #' @param minparams Minimum params for search
+    #' @param maxparams Maximum params for search
+    #' @param data.freq Number of data points per season, e.g. season = 24 hrs, 
+    #'                  data points are 2 minutes apart => data.freq = 24*60/2 = 720
 
 Returns:
     STL object (object containing trend, seasonality, and remainder).
